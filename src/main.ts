@@ -1,16 +1,18 @@
-import * as core from '@actions/core'
-import {wait} from './wait'
+import comment from './comment'
+import core from '@actions/core'
+import createMessage from './createMessage'
+import parse from './parse'
+import createPayload from './createPayload'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
+    const raw: string = core.getInput('json', {required: true})
+    const data = parse(raw)
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const platforms = await createPayload(data)
 
-    core.setOutput('time', new Date().toTimeString())
+    const message = await createMessage(platforms)
+    await comment(message)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }

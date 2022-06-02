@@ -1,11 +1,13 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'EAS build comment'
+description: 'Comments output of EAS build to your PR'
+author: 'Raul Steurer'
 inputs:
-  milliseconds: # change this
+  ghToken:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'Github Token'
+  json:
+    required: true
+    description: 'JSON output of build step'
 runs:
   using: 'node16'
   main: 'dist/index.js'
